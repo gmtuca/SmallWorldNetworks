@@ -38,8 +38,31 @@
   (function(){
       var s = document.createElement('script');
       s.src = 'http://code.jquery.com/jquery-1.8.2.min.js';
-      document.getElementsByTagName('head')[0].appendChild( s );
+      document.getElementsByTagName('head')[0].appendChild(s);
   })();
+
+  //http://stackoverflow.com/questions/281264/remove-empty-elements-from-an-array-in-javascript
+  function clean(arr) {
+    for(var i = 0; i < arr.length; i++){
+      if(arr[i] === undefined){ arr.splice(i--, 1); }
+    }
+    return arr;
+  };
+
+  function randomItem(arr) {
+    return arr[Math.floor(Math.random()*arr.length)];
+  };
+
+  //http://stackoverflow.com/questions/728360/most-elegant-way-to-clone-a-javascript-object
+  function clone(obj) {
+    var newObj = (obj instanceof Array) ? [] : {};
+    for (var i in obj) {
+      if (i == 'clone') continue;
+      if (obj[i] && typeof obj[i] == "object") {
+        newObj[i] = clone(obj[i]);
+      } else newObj[i] = obj[i]
+    } return newObj;
+  };
 
   //url decoder from:
   //http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
@@ -76,8 +99,9 @@
   function generateWattsStrogatzModel(N, K, P){
     if(N < 0){throw "Number of nodes N must be greater than 1"}
     if(K < 0 || K % 2 != 0){throw "Node degree K must be a positive even number"}
-    if(K >= N){throw "Node degree K must be smaller than number of nodes N"}
     if(P < 0 || P > 1){throw "Probability of rewiring must be 0 <= P <=1"}
+
+    console.log("N is " + N);
 
     var nodes = new Array(N);
     var edges = [];
@@ -102,7 +126,7 @@
       for(var k = 0; k <= K/2; k++){
         if(k != 0){
           edges.push({from: n,
-                      to: (n+k < 0) ? nodes.length+k : (n+k)%nodes.length,
+                      to: (n+k)%nodes.length,
                       label: e++});
         }
       }
@@ -110,9 +134,20 @@
 
     //rewire
     for(var e = 0; e < edges.length; e++){
-      if(Math.random() < P){ //rewire and avoid self-wiring
-        do{}
-        while((edges[e].to = Math.floor(Math.random() * N)) == edges[e].from);
+      if(Math.random() < P){
+        //rewire while avoiding self loops and duplicate undirected edges
+
+        var rewireList = nodes.slice();
+
+        var delFrom = edges[e].from-K/2 > 0 ? edges[e].from-K/2 : N-K/2+edges[e].from;
+
+        for(var i=0; i < K+1; i++){
+          rewireList[(delFrom+i)%N] = undefined;
+        }
+
+        clean(rewireList);
+
+        edges[e].to = randomItem(rewireList).id;
       }
     }
 
@@ -228,10 +263,11 @@
       }
 
       return path.reverse();
+      //return path;
     }
   }
 
-  function buildIndexList(start, path) {
+  function buildIndexList(path) {
     var result = [];
 
     for(var j = 0; j < currentPath.length - 1; j++) {
@@ -249,36 +285,50 @@
     return result;
   }
 
-  var model = generateWattsStrogatzModel(qs["N"] || 10, qs["K"] || 4, qs["P"] || 0.15);
+  var model = generateWattsStrogatzModel(qs["N"] || 30, qs["K"] || 4, qs["P"] || 0.15);
+  var originalModel = clone(model);
+
   var network = draw(model,'buffer_true');
   var graphThing = new graph();
   var shortestSum = 0.0;
   graphThing.buildGraph();
+
+  var dijk_paths = [];
 
   for(var i = 0; i < model.nodes.length; i++) {
     for(var j = 0; j < model.nodes.length; j++) {
       if(i != j) {
         var currentPath = graphThing.shortestPath(i, j);
         shortestSum += (currentPath.length - 1.0);
-        var currentIndexList = buildIndexList(i, currentPath);
+
+        dijk_paths.push({from: i, to: j, path: buildIndexList(currentPath)});
       }
     }  
   }
 
   shortestSum = (1.0/(0.5*(model.nodes.length*(model.nodes.length - 1.0)))) * (shortestSum / 2.0); // As every edge is undirected
 
-  animatePath(currentIndexList);
+  animate(dijk_paths,0);
 
   alert("Average path length calculated as " + shortestSum);
 
-  function animatePath(path){
+  function animate(dijk_paths,p){
+    if(p > dijk_paths.length){return;}
+
+    var path = dijk_paths[p].path;
+    var from = dijk_paths[p].from;
+    var to = dijk_paths[p].to;
+
+    model.nodes[from].color = 'green';
+    model.nodes[to].color = 'yellow'; 
+
     var currentNetwork = true;
     var i = 0;
 
     highlight(i++);
     draw(model,'buffer_' + !currentNetwork); //draw on the background frame
 
-    setTimeout(swapBuffers, 500); //run every second
+    setTimeout(swapBuffers, 1000); //run every second
 
     function highlight(i){
       model.edges[path[i]].color = 'red';
@@ -287,17 +337,21 @@
     }
 
     function swapBuffers(){
-      //if(i < path.length){
-        currentNetwork = !currentNetwork;
-        $("#buffer_" + !currentNetwork).insertBefore("#buffer_" + currentNetwork);
+      currentNetwork = !currentNetwork;
+      $("#buffer_" + !currentNetwork).insertBefore("#buffer_" + currentNetwork);
 
+      if(path[i] == undefined){
+        model = clone(originalModel);
+        animate(dijk_paths,p+1);
+      }
+      else{
         highlight(i);
         i++;
 
         draw(model,'buffer_' + !currentNetwork);
 
         setTimeout(swapBuffers, 1000);      
-      //}
+      }
     }
 
   }
