@@ -200,16 +200,13 @@
         smallest = nodes.dequeue();
 
         if(smallest === finish) {
-          path;
-
-          path.push(smallest);
-
           while(previous[smallest]) {
-            smallest = previous[smallest];
             path.push(smallest);
+            smallest = previous[smallest];
           }
 
-          path.push(start);
+          path.push(smallest);
+          if(smallest != start) path.push(start);
 
           break;
         }
@@ -249,31 +246,30 @@
       }
     }
 
-    console.log(result);
-
     return result;
   }
 
   var model = generateWattsStrogatzModel(qs["N"] || 10, qs["K"] || 4, qs["P"] || 0.15);
-
   var network = draw(model,'buffer_true');
-
   var graphThing = new graph();
+  var shortestSum = 0.0;
   graphThing.buildGraph();
-/*
+
   for(var i = 0; i < model.nodes.length; i++) {
     for(var j = 0; j < model.nodes.length; j++) {
       if(i != j) {
         var currentPath = graphThing.shortestPath(i, j);
+        shortestSum += (currentPath.length - 1.0);
         var currentIndexList = buildIndexList(i, currentPath);
-        animatePath(currentIndexList);
       }
     }  
   }
-*/
-  var currentPath = graphThing.shortestPath(0, 5);
-  var currentIndexList = buildIndexList(0, currentPath);
+
+  shortestSum = (1.0/(0.5*(model.nodes.length*(model.nodes.length - 1.0)))) * (shortestSum / 2.0); // As every edge is undirected
+
   animatePath(currentIndexList);
+
+  alert("Average path length calculated as " + shortestSum);
 
   function animatePath(path){
     var currentNetwork = true;
