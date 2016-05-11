@@ -14,18 +14,18 @@
     }
 
     #network {
-      position:fixed;
-      padding:0;
-      margin:0;
+        position:fixed;
+        padding:0;
+        margin:0;
 
-      top:0;
-      left:0;
+        top:0;
+        left:0;
 
-      width: 100%;
-      height: 100%;
+        width: 100%;
+        height: 100%;
 
-      border:0px;
-      background-color: #222222;
+        border:0px;
+        background-color: #222222;
     }
   </style>
 </head>
@@ -57,20 +57,32 @@
     var data = {nodes: model.nodes, edges: model.edges};
     var options = {layout:{randomSeed:17}};
     return new vis.Network(container, data, options);
-  //highlight(model.edges[2]);
   }
   
   function generateWattsStrogatzModel(N, K, P){
-    if(N < 0){throw "Needs at least one node"}
-    if(K < 0 || K % 2 != 0){throw "Degree must be a positive even number"}
-    if(P < 0 || P > 1){throw "Beta must be 0<=B<=1"}
+    if(N < 0){throw "Number of nodes N must be greater than 1"}
+    if(K < 0 || K % 2 != 0){throw "Node degree K must be a positive even number"}
+    if(P < 0 || P > 1){throw "Probability of rewiring must be 0<=P<=1"}
 
     var nodes = new Array(N);
     var edges = [];
 
+    //position nodes in a circle
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+
+    var x0 = 0;
+    var y0 = 0;
+    var r = w < h ? w/3 : h/3;
+
     for(var n = 0; n < N; n++){
-       nodes[n]=({id: n, label: n});
+       nodes[n]=({id: n, label: n,
+                  x: x0 + r * Math.cos(2*Math.PI*n/N),
+                  y: y0 + r * Math.sin(2*Math.PI*n/N),
+                  fixed:{x:true,y:true}});
     }
+
+    console.log(nodes);
 
     for (var n = 0; n < N; n++) {
       for(var k = 0; k <= K/2; k++){
@@ -92,9 +104,10 @@
     return {"nodes": nodes, "edges": edges};
   }
 
-  var model = generateWattsStrogatzModel(qs["N"] || 10, qs["K"] || 4, qs["P"] || 0);
+  var model = generateWattsStrogatzModel(qs["N"] || 30, qs["K"] || 4, qs["P"] || 0.15);
 
   var network = draw(model,'network');
+
 </script>
 </body>
 </html>
