@@ -262,9 +262,6 @@
         }
       }
 
-
-      console.log(start + " > " + finish + " = " + path.reverse());
-
       return path.reverse();
       //return path;
     }
@@ -317,10 +314,6 @@
 
   shortestSum = (1.0/(0.5*(model.nodes.length*(model.nodes.length - 1.0)))) * (shortestSum / 2.0); // As every edge is undirected
 
-  for(var i = 0; i < dijk_paths.length; i++){
-    console.log(dijk_paths[i].from + " > " + dijk_paths[i].to + " = [" + dijk_paths[i].path + "]");
-  }
-
   document.body.onkeyup = function(e){
       if(e.keyCode == 32){
           animate(dijk_paths,0);
@@ -332,13 +325,14 @@
   var currentNetwork = true;
 
   function animate(dijk_paths,p){
-    if(p > dijk_paths.length){return;}
+    if(p >= dijk_paths.length){
+      draw(originalModel,'buffer_' + currentNetwork); 
+      return;
+    }
 
     var path = dijk_paths[p].path;
     var from = dijk_paths[p].from;
     var to = dijk_paths[p].to;
-
-    console.log(from + " > " + to + " = [" + path + "] (len: " + path.length + ")");
 
     model.nodes[from].color = 'green';
     model.nodes[to].color = 'yellow'; 
