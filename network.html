@@ -101,8 +101,6 @@
     if(K < 0 || K % 2 != 0){throw "Node degree K must be a positive even number"}
     if(P < 0 || P > 1){throw "Probability of rewiring must be 0 <= P <=1"}
 
-    console.log("N is " + N);
-
     var nodes = new Array(N);
     var edges = [];
 
@@ -127,7 +125,9 @@
         if(k != 0){
           edges.push({from: n,
                       to: (n+k)%nodes.length,
-                      label: e++});
+                      label: e,
+                      id: e++,
+                    });
         }
       }
     }
@@ -213,8 +213,8 @@
 
     this.shortestPath = function(start, finish) {
       var nodes = new priorityQueue(),
-          distances = {},
-          previous = {},
+          distances = new Array(model.nodes.length),
+          previous = new Array(model.nodes.length),
           path = [],
           smallest, neighbor, alt;
 
@@ -262,6 +262,9 @@
         }
       }
 
+
+      console.log(start + " > " + finish + " = " + path.reverse());
+
       return path.reverse();
       //return path;
     }
@@ -274,10 +277,10 @@
       for(var i = 0; i < model.edges.length; i++) {
         if(model.edges[i].from == currentPath[j]
           && model.edges[i].to == currentPath[j + 1]) {
-          result.push(model.edges[i].label);
+          result.push(model.edges[i].id);
         } else if(model.edges[i].to == currentPath[j]
             && model.edges[i].from == currentPath[j + 1]) {
-          result.push(model.edges[i].label);
+          result.push(model.edges[i].id);
         }
       }
     }
@@ -289,16 +292,16 @@
   var originalModel = clone(model);
 
   var network = draw(model,'buffer_true');
-  var graphThing = new graph();
+  var g = new graph();
   var shortestSum = 0.0;
-  graphThing.buildGraph();
+  g.buildGraph();
 
   var dijk_paths = [];
 
   for(var i = 0; i < model.nodes.length; i++) {
     for(var j = 0; j < model.nodes.length; j++) {
       if(i != j) {
-        var currentPath = graphThing.shortestPath(i, j);
+        var currentPath = g.shortestPath(i, j);
         shortestSum += (currentPath.length - 1.0);
 
         dijk_paths.push({from: i, to: j, path: buildIndexList(currentPath)});
@@ -308,9 +311,19 @@
 
   shortestSum = (1.0/(0.5*(model.nodes.length*(model.nodes.length - 1.0)))) * (shortestSum / 2.0); // As every edge is undirected
 
-  animate(dijk_paths,0);
+  for(var i = 0; i < dijk_paths.length; i++){
+    console.log(dijk_paths[i].from + " > " + dijk_paths[i].to + " = [" + dijk_paths[i].path + "]");
+  }
 
-  alert("Average path length calculated as " + shortestSum);
+  document.body.onkeyup = function(e){
+      if(e.keyCode == 32){
+          animate(dijk_paths,0);
+      }
+  }
+
+  //alert("Average path length calculated as " + shortestSum);
+
+  var currentNetwork = true;
 
   function animate(dijk_paths,p){
     if(p > dijk_paths.length){return;}
@@ -319,16 +332,17 @@
     var from = dijk_paths[p].from;
     var to = dijk_paths[p].to;
 
+    console.log(from + " > " + to + " = [" + path + "] (len: " + path.length + ")");
+
     model.nodes[from].color = 'green';
     model.nodes[to].color = 'yellow'; 
 
-    var currentNetwork = true;
     var i = 0;
 
     highlight(i++);
     draw(model,'buffer_' + !currentNetwork); //draw on the background frame
 
-    setTimeout(swapBuffers, 1000); //run every second
+    setTimeout(swapBuffers, 100); //run every second
 
     function highlight(i){
       model.edges[path[i]].color = 'red';
@@ -342,7 +356,8 @@
 
       if(path[i] == undefined){
         model = clone(originalModel);
-        animate(dijk_paths,p+1);
+
+        setTimeout(function(){animate(dijk_paths,p+1);}, 200);
       }
       else{
         highlight(i);
@@ -350,7 +365,7 @@
 
         draw(model,'buffer_' + !currentNetwork);
 
-        setTimeout(swapBuffers, 1000);      
+        setTimeout(swapBuffers, 100);      
       }
     }
 
