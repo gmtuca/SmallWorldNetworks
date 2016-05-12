@@ -246,7 +246,7 @@
           break;
         }
 
-        if(smallest == undefined || distances[smallest] === INFINITY){
+        if(!smallest || distances[smallest] === INFINITY){
           continue;
         }
 
@@ -298,6 +298,8 @@
 
   var dijk_paths = [];
 
+  var timer = (new Date()).getTime();
+
   for(var i = 0; i < model.nodes.length; i++) {
     for(var j = 0; j < model.nodes.length; j++) {
       if(i != j) {
@@ -308,6 +310,10 @@
       }
     }  
   }
+
+  timer = (new Date()).getTime() - timer;
+
+  alert((timer / 1000.0) + " seconds to run.");
 
   shortestSum = (1.0/(0.5*(model.nodes.length*(model.nodes.length - 1.0)))) * (shortestSum / 2.0); // As every edge is undirected
 
