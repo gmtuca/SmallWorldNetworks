@@ -1,6 +1,7 @@
 # Average Path Length in Small World Networks
 
-We have written an implementation using *Dijkstra's Algorithm* to calculate the average shortest path length of nodes in a Small World Networks, which is generated using the *Watts and Strogatz model*, visualized with the vis.js API.
+We have written an implementation using *Dijkstra's Algorithm* to calculate the average shortest path length of nodes in a Small World Network, which is generated using the *Watts and Strogatz model*, visualized with the vis.js API.
+
 The code can be seen at *network.html* (preview at http://htmlpreview.github.io/?http://github.com/gmtuca/SmallWorldNetworks/blob/master/network.html).
 
 The time taken to compute the algorithm and average path length are displayed under the browser's console (F12 on Google Chrome).
