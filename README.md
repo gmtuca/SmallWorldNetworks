@@ -20,4 +20,5 @@ Keep in mind that the UI cannot handle a very large amount of nodes/edges.
 
 Slides can be found at https://docs.google.com/presentation/d/1kMoNlmsFh90n-FqlgHeN6s3AhAFEkfkgBpZD0GG6orU
 
-Performance benchmarks can be found at https://docs.google.com/spreadsheets/d/1ku8zYJJQfn9kzJI1QJ0nHbaMyWxg_tI5g2zf1iu4p_E
+Benchmark numbers can be found at https://docs.google.com/spreadsheets/d/1ku8zYJJQfn9kzJI1QJ0nHbaMyWxg_tI5g2zf1iu4p_E,
+plotted at https://docs.google.com/document/d/1GZopFar5Qa36aDhvdbZyjK5NDDT6qQ2C7MOSCj9CxME
