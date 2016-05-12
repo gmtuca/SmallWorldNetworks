@@ -98,9 +98,6 @@
     if(K < 0 || K % 2 != 0){throw "Node degree K must be a positive even number"}
     if(P < 0 || P > 1){throw "Probability of rewiring must be 0 <= P <=1"}
 
-    console.log("N:" + N);
-    console.log("K:" + K);
-    console.log("P:" + P);
     var nodes = new Array(N);
     var edges = [];
 
@@ -350,7 +347,7 @@
     highlight(i++);
     draw(model,'buffer_' + !currentNetwork); //draw on the background frame
 
-    setTimeout(swapBuffers, transitionTime); //run every second
+    setTimeout(swapBuffers, qs_transitionTime); //run every second
 
     function highlight(i){
       model.edges[path[i]].color = 'red';
@@ -365,7 +362,7 @@
       if(path[i] == undefined){
         model = clone(originalModel);
 
-        setTimeout(function(){animate(dijk_paths,p+1);}, transitionTime*2);
+        setTimeout(function(){animate(dijk_paths,p+1);}, qs_transitionTime*2);
       }
       else{
         highlight(i);
@@ -373,7 +370,7 @@
 
         draw(model,'buffer_' + !currentNetwork);
 
-        setTimeout(swapBuffers, transitionTime);      
+        setTimeout(swapBuffers, qs_transitionTime);      
       }
     }
 
