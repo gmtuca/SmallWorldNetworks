@@ -246,7 +246,7 @@
           break;
         }
 
-        if(!smallest || distances[smallest] === INFINITY){
+        if((!smallest && start != 0) || distances[smallest] === INFINITY){
           continue;
         }
 
