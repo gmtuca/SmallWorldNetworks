@@ -3,8 +3,11 @@
 <head>
   <title>Small World Network</title>
 
-  <script type="text/javascript" src="http://visjs.org/dist/vis.js"></script>
-  <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css" />
+  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+  <script type="text/javascript" src="http://visjs.org/dist/vis.js"></script>  
+  <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css"/>
 
   <style type="text/css">
     body {
@@ -13,7 +16,7 @@
         background-color: #222222;
     }
 
-    div {
+    .buffer {
         position:absolute;
         padding:0;
         margin:0;
@@ -31,15 +34,10 @@
 </head>
 <body>
 
-<div id="buffer_false"></div>
-<div id="buffer_true"></div>
+<div class="buffer" id="buffer_false"></div>
+<div class="buffer" id="buffer_true"></div>
 
 <script type="text/javascript">
-  (function(){
-      var s = document.createElement('script');
-      s.src = 'http://code.jquery.com/jquery-1.8.2.min.js';
-      document.getElementsByTagName('head')[0].appendChild(s);
-  })();
 
   //http://stackoverflow.com/questions/281264/remove-empty-elements-from-an-array-in-javascript
   function clean(arr) {
@@ -231,6 +229,10 @@
         previous[i] = null;
       }
 
+      if(start === 1 && finish === 4){
+        
+      }    
+
       while(!nodes.isEmpty()) {
         smallest = nodes.dequeue();
 
@@ -338,7 +340,7 @@
     model.nodes[to].color = 'yellow'; 
 
     var i = 0;
-
+ 
     highlight(i++);
     draw(model,'buffer_' + !currentNetwork); //draw on the background frame
 
