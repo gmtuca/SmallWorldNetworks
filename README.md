@@ -6,7 +6,7 @@ The code can be seen at *network.html* (preview at http://htmlpreview.github.io/
 
 The time taken to compute the algorithm and average path length are displayed under the browser's console (F12 on Google Chrome).
 
-In order to start the demonstration simply **press SPACE**.
+In order to start the demonstration simply **press SPACE**. Green represents the start node, yellow the end node and red the shortest path between them.
 
 The following parameters can be passed to the webpage for customization:
 - **N** (default 30) number of nodes in the network
