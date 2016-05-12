@@ -98,6 +98,9 @@
     if(K < 0 || K % 2 != 0){throw "Node degree K must be a positive even number"}
     if(P < 0 || P > 1){throw "Probability of rewiring must be 0 <= P <=1"}
 
+    console.log("N:" + N);
+    console.log("K:" + K);
+    console.log("P:" + P);
     var nodes = new Array(N);
     var edges = [];
 
@@ -286,10 +289,10 @@
     return result;
   }
 
-  var qs_transitionTime = qs["T"] ? parseInt(qs["T"]) : 100;
-  var qs_N = qs["N"] ? parseInt(qs["N"]) : 30;
-  var qs_K = qs["K"] ?  parseInt(qs["K"]) : 4;
-  var qs_P = qs["P"] ?  parseInt(qs["P"]) : 0.15;
+  var qs_transitionTime = qs["T"] !== undefined ? parseInt(qs["T"]) : 100;
+  var qs_N = qs["N"] !== undefined ? parseInt(qs["N"]) : 30;
+  var qs_K = qs["K"] !== undefined ?  parseInt(qs["K"]) : 4;
+  var qs_P = qs["P"] !== undefined ?  parseFloat(qs["P"]) : 0.15;
 
   var model = generateWattsStrogatzModel(qs_N, qs_K, qs_P);
   var originalModel = clone(model);
