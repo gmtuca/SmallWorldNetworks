@@ -310,7 +310,7 @@
 
   timer = (new Date()).getTime() - timer;
 
-  alert((timer / 1000.0) + " seconds to run.");
+  console.log((timer / 1000.0) + " seconds to run.");
 
   shortestSum = (1.0/(0.5*(model.nodes.length*(model.nodes.length - 1.0)))) * (shortestSum / 2.0); // As every edge is undirected
 
@@ -320,7 +320,7 @@
       }
   }
 
-  //alert("Average path length calculated as " + shortestSum);
+  console.log("Average path length calculated as " + shortestSum);
 
   var currentNetwork = true;
 
