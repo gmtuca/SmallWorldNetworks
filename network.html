@@ -65,6 +65,9 @@
   //http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
   var qs = (function(a) {
       if (a == "") return {};
+      var parts = a.split('?');
+      a = a[parts.length-1]; //fix for online preview where URL has multiple '?'
+      
       var b = {};
       for (var i = 0; i < a.length; ++i)
       {
