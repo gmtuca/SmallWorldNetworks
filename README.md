@@ -9,9 +9,9 @@ The time taken to compute the algorithm and average path length are displayed un
 In order to start the demonstration simply **press SPACE**. Green represents the start node, yellow the end node and red the shortest path between them.
 
 The following parameters can be passed to the webpage for customization:
-- **N** (default 30) number of nodes in the network
+- **N** (default 20) number of nodes in the network
 - **K** (default 4) out/in degree of each node (must be even)
-- **P** (default 0.15) probability of rewiring on Watts and Strogatz model
+- **P** (default 0.2) probability of rewiring on Watts and Strogatz model
 - **T** (default: 100) time (ms) delay between drawing of edges in the demo
 
 Example: *network.html?N=30&K=4&P=0.2*
