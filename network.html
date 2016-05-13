@@ -284,9 +284,9 @@
   }
 
   var qs_transitionTime = qs["T"] !== undefined ? parseInt(qs["T"]) : 100;
-  var qs_N = qs["N"] !== undefined ? parseInt(qs["N"]) : 30;
+  var qs_N = qs["N"] !== undefined ? parseInt(qs["N"]) : 20;
   var qs_K = qs["K"] !== undefined ?  parseInt(qs["K"]) : 4;
-  var qs_P = qs["P"] !== undefined ?  parseFloat(qs["P"]) : 0.15;
+  var qs_P = qs["P"] !== undefined ?  parseFloat(qs["P"]) : 0.2;
 
   var model = generateWattsStrogatzModel(qs_N, qs_K, qs_P);
   var originalModel = clone(model);
