@@ -228,10 +228,6 @@
         previous[i] = null;
       }
 
-      if(start === 1 && finish === 4){
-        
-      }    
-
       while(!nodes.isEmpty()) {
         smallest = nodes.dequeue();
 
@@ -264,7 +260,6 @@
       }
 
       return path.reverse();
-      //return path;
     }
   }
 
@@ -316,10 +311,10 @@
 
   timer = (new Date()).getTime() - timer;
 
-  shortestSum = (1.0/(0.5*(model.nodes.length*(model.nodes.length - 1.0)))) * (shortestSum / 2.0); // As every edge is undirected
+  shortestSum = (1.0/(0.5*(model.nodes.length*(model.nodes.length - 1.0)))) * (shortestSum / 2.0); // every edge is undirected
 
   document.body.onkeyup = function(e){
-      if(e.keyCode == 32){
+      if(e.keyCode == 32){ //space pressed
           animate(dijk_paths,0);
       }
   }
@@ -347,7 +342,7 @@
     highlight(i++);
     draw(model,'buffer_' + !currentNetwork); //draw on the background frame
 
-    setTimeout(swapBuffers, qs_transitionTime); //run every second
+    setTimeout(swapBuffers, qs_transitionTime);
 
     function highlight(i){
       model.edges[path[i]].color = 'red';
